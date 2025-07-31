@@ -22,7 +22,7 @@ export async function POST(req: Response) {
 
 	const accessToken = signAccessToken(user.id);
 	const refreshToken = signRefreshToken(user.id);
-	setAuthCookies(accessToken, refreshToken);
+	await setAuthCookies(accessToken, refreshToken);
 
 	return NextResponse.json({
 		status: "success",

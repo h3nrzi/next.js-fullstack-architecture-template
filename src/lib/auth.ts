@@ -1,19 +1,29 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-
-const ACCESS_TOKEN_SECRET = "access-secret"; // Replace with env later
-const REFRESH_TOKEN_SECRET = "refresh-secret"; // Replace with env later
+import { JWTPayload, jwtVerify } from "jose";
 
 export function signAccessToken(userId: string): string {
-	return jwt.sign({ userId }, ACCESS_TOKEN_SECRET, {
-		expiresIn: "15m",
-	});
+	return jwt.sign(
+		{
+			userId,
+		},
+		process.env.JWT_ACCESS_SECRET!,
+		{
+			expiresIn: "15m",
+		},
+	);
 }
 
 export function signRefreshToken(userId: string): string {
-	return jwt.sign({ userId }, REFRESH_TOKEN_SECRET, {
-		expiresIn: "7d",
-	});
+	return jwt.sign(
+		{
+			userId,
+		},
+		process.env.JWT_REFRESH_SECRET!,
+		{
+			expiresIn: "7d",
+		},
+	);
 }
 
 export async function setAuthCookies(
@@ -24,7 +34,7 @@ export async function setAuthCookies(
 
 	cookieStore.set("accessToken", accessToken, {
 		httpOnly: true,
-		secure: true,
+		secure: false,
 		sameSite: "strict",
 		path: "/",
 		maxAge: 60 * 15,
@@ -33,7 +43,7 @@ export async function setAuthCookies(
 	if (refreshToken) {
 		cookieStore.set("refreshToken", refreshToken, {
 			httpOnly: true,
-			secure: true,
+			secure: false,
 			sameSite: "strict",
 			path: "/",
 			maxAge: 60 * 60 * 24 * 7,
@@ -44,8 +54,15 @@ export async function setAuthCookies(
 export async function verifyToken(
 	token: string,
 	secretKey: string,
-): Promise<string | jwt.JwtPayload> {
-	return jwt.verify(token, secretKey);
+): Promise<JWTPayload | null> {
+	const key = new TextEncoder().encode(secretKey);
+
+	try {
+		const { payload } = await jwtVerify(token, key);
+		return payload;
+	} catch {
+		return null;
+	}
 }
 
 export async function clearAuthCookies(): Promise<void> {

@@ -1,12 +1,11 @@
 import {
 	setAuthCookies,
 	signAccessToken,
+	signRefreshToken,
 	verifyToken,
 } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-
-const REFRESH_TOKEN_SECRET = "refresh-secret"; // Move to env
 
 export async function POST() {
 	const cookieStore = await cookies();
@@ -14,33 +13,43 @@ export async function POST() {
 
 	if (!refreshToken) {
 		return NextResponse.json(
-			{ error: "No refresh token was provided!" },
-			{ status: 401 },
-		);
-	}
-
-	try {
-		const payload = (await verifyToken(
-			refreshToken,
-			REFRESH_TOKEN_SECRET,
-		)) as { userId: string };
-
-		const newAccessToken = signAccessToken(payload.userId);
-		setAuthCookies(newAccessToken, undefined);
-
-		return NextResponse.json(
-			{ status: "success" },
-			{ status: 200 },
-		);
-	} catch {
-		return NextResponse.json(
 			{
-				status: "fail",
 				errors: [
-					{ field: null, message: "Invalid refresh token" },
+					{
+						field: null,
+						message: "No refresh token was provided!",
+					},
 				],
 			},
 			{ status: 401 },
 		);
 	}
+
+	const payload = (await verifyToken(
+		refreshToken,
+		process.env.JWT_REFRESH_SECRET!,
+	)) as { userId: string };
+
+	if (!payload)
+		return NextResponse.json(
+			{
+				status: "fail",
+				errors: [
+					{
+						field: null,
+						message: "Invalid refresh token",
+					},
+				],
+			},
+			{ status: 401 },
+		);
+
+	const newAccessToken = signAccessToken(payload.userId);
+	const newRefreshToken = signRefreshToken(payload.userId);
+	await setAuthCookies(newAccessToken, newRefreshToken);
+
+	return NextResponse.json(
+		{ status: "success" },
+		{ status: 200 },
+	);
 }
