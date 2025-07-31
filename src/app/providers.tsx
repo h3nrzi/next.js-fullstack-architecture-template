@@ -5,5 +5,5 @@ import { store } from "@/store";
 import { PropsWithChildren } from "react";
 
 export function AppProviders({ children }: PropsWithChildren) {
-  return <Provider store={store}>{children}</Provider>;
+	return <Provider store={store}>{children}</Provider>;
 }
