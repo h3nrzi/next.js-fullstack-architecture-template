@@ -24,5 +24,8 @@ export async function POST(req: Response) {
 	const refreshToken = signRefreshToken(user.id);
 	setAuthCookies(accessToken, refreshToken);
 
-	return NextResponse.json({ user });
+	return NextResponse.json({
+		status: "success",
+		data: { user },
+	});
 }

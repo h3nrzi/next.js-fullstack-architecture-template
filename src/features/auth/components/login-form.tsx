@@ -3,10 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import { LoginInput, loginSchema } from "../schema/auth.schema";
 import { useLoginMutation } from "../services/auth.api";
 
 export default function LoginForm() {
+	const searchParams = useSearchParams();
+	const router = useRouter();
 	const [login, { isLoading, error }] = useLoginMutation();
 
 	const { register, handleSubmit, formState } =
@@ -16,9 +19,8 @@ export default function LoginForm() {
 
 	const onSubmit = async (data: LoginInput) => {
 		try {
-			const response = await login(data).unwrap();
-			console.log("Login success:", response);
-			// TODO: Store tokens, redirect
+			await login(data).unwrap();
+			router.push(searchParams.get("redirect") || "/");
 		} catch (err) {
 			console.error("Login failed:", err);
 		}

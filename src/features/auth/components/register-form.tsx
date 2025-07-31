@@ -8,8 +8,11 @@ import {
 	registerSchema,
 } from "../schema/auth.schema";
 import { useRegisterMutation } from "../services/auth.api";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function RegisterForm() {
+	const searchParams = useSearchParams();
+	const router = useRouter();
 	const [registerUser, { isLoading, error }] =
 		useRegisterMutation();
 
@@ -20,9 +23,8 @@ export function RegisterForm() {
 
 	const onSubmit = async (data: RegisterInput) => {
 		try {
-			const response = await registerUser(data).unwrap();
-			console.log("Registered:", response);
-			// TODO: Store tokens, redirect
+			await registerUser(data).unwrap();
+			router.push(searchParams.get("redirect") || "/");
 		} catch (err) {
 			console.error("Registration error:", err);
 		}
