@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 	},
 	{
 		toJSON: {
-			transform(doc, ret: IUserDoc) {
+			transform(doc, ret: any) {
 				ret.id = ret._id as string;
 				delete ret._id;
 				delete ret.__v;
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 			},
 		},
 		toObject: {
-			transform(doc, ret: IUserDoc) {
+			transform(doc, ret: any) {
 				ret.id = ret._id as string;
 				delete ret._id;
 				delete ret.__v;
@@ -50,6 +50,11 @@ userSchema.pre("save", async function (next) {
 
 	next();
 });
+
+// Compare password
+userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+	return await bcrypt.compare(password, this.password);
+};
 
 // Create model if it doesn't exist
 const UserModel =

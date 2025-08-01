@@ -11,6 +11,8 @@ export interface IUserDoc extends mongoose.Document {
 	name: string;
 	email: string;
 	password: string;
+
+	comparePassword(password: string): Promise<boolean>;
 }
 
 export interface IUserModel extends mongoose.Model<IUserDoc> {

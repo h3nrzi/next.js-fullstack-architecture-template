@@ -29,16 +29,16 @@ export async function POST(req: NextRequest) {
 	}
 
 	try {
-		const createdUser = await container.userService.register(parsed.data);
+		const user = await container.userService.register(parsed.data);
 
-		const accessToken = signAccessToken(createdUser.id);
-		const refreshToken = signRefreshToken(createdUser.id);
+		const accessToken = signAccessToken(user.id);
+		const refreshToken = signRefreshToken(user.id);
 		await setAuthCookies(accessToken, refreshToken);
 
 		return NextResponse.json(
 			{
 				status: "success",
-				data: { user: createdUser },
+				data: { user },
 			},
 			{ status: 200 },
 		);
