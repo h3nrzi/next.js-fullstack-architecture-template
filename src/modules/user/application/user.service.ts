@@ -14,7 +14,7 @@ export class UserService {
 		return (await this.userRepo.create(registerInput)).toObject();
 	}
 
-	async login(loginInput: LoginInput) {
+	async login(loginInput: LoginInput): Promise<IUserDoc> {
 		const authenticatedUser = await this.userRepo.findByEmail(loginInput.email);
 		if (!authenticatedUser) {
 			throw new Error("ایمیل یا رمز عبور اشتباه است");

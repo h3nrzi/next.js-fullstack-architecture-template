@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 		password: {
 			type: String,
 			required: true,
-			select: false,
 		},
 	},
 	{
@@ -27,6 +26,7 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 				ret.id = ret._id as string;
 				delete ret._id;
 				delete ret.__v;
+				delete ret.password;
 				return ret;
 			},
 		},
@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 				ret.id = ret._id as string;
 				delete ret._id;
 				delete ret.__v;
+				delete ret.password;
 				return ret;
 			},
 		},
