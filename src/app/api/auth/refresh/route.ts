@@ -4,48 +4,60 @@ import {
 	signRefreshToken,
 	verifyToken,
 } from "@/lib/auth";
+import { CustomError } from "@/lib/errors/custom-error";
+import { NotAuthorizedError } from "@/lib/errors/not-authorized-error";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST() {
-	const cookieStore = await cookies();
-	const refreshToken = cookieStore.get("refreshToken")?.value;
+	try {
+		const cookieStore = await cookies();
 
-	if (!refreshToken) {
+		const refreshToken = cookieStore.get("refreshToken")?.value;
+		if (!refreshToken) {
+			throw new NotAuthorizedError("رفرش توکن یافت نشد");
+		}
+
+		const payload = (await verifyToken(
+			refreshToken,
+			process.env.JWT_REFRESH_SECRET!,
+		)) as {
+			userId: string;
+		};
+		if (!payload) {
+			throw new NotAuthorizedError("رفرش توکن نامعتبر است");
+		}
+
+		const newAccessToken = signAccessToken(payload.userId);
+		const newRefreshToken = signRefreshToken(payload.userId);
+		await setAuthCookies(newAccessToken, newRefreshToken);
+
 		return NextResponse.json(
 			{
-				errors: [
-					{
-						field: null,
-						message: "No refresh token was provided!",
-					},
-				],
+				status: "success",
+				message: "توکن های شما با موفقیت بروزرسانی شدند.",
 			},
-			{ status: 401 },
+			{ status: 200 },
 		);
-	}
+	} catch (err) {
+		if (err instanceof CustomError) {
+			return NextResponse.json(
+				{ status: "fail", errors: err.serializeErrors() },
+				{ status: err.statusCode },
+			);
+		}
 
-	const payload = (await verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET!)) as {
-		userId: string;
-	};
-
-	if (!payload)
 		return NextResponse.json(
 			{
 				status: "fail",
 				errors: [
 					{
 						field: null,
-						message: "Invalid refresh token",
+						message: "سیستم با خطا مواجه شده است. لطفا چند دقیقه دیگر دوباره تلاش کنید.",
 					},
 				],
 			},
-			{ status: 401 },
+			{ status: 500 },
 		);
-
-	const newAccessToken = signAccessToken(payload.userId);
-	const newRefreshToken = signRefreshToken(payload.userId);
-	await setAuthCookies(newAccessToken, newRefreshToken);
-
-	return NextResponse.json({ status: "success" }, { status: 200 });
+	}
 }

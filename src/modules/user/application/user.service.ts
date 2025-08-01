@@ -1,4 +1,6 @@
 import { LoginInput, RegisterInput } from "@/features/auth/schema/auth.schema";
+import { NotAuthorizedError } from "@/lib/errors/not-authorized-error";
+import { BadRequestError } from "@/lib/errors/bad-request-error";
 import { IUserDoc } from "../domain/user.interface";
 import { UserRepository } from "../infra/user.repository";
 
@@ -8,7 +10,7 @@ export class UserService {
 	async register(registerInput: RegisterInput): Promise<IUserDoc> {
 		const existingUser = await this.userRepo.findByEmail(registerInput.email);
 		if (existingUser) {
-			throw new Error("ایمیل قبلا استفاده شده است");
+			throw new BadRequestError("ایمیل قبلا استفاده شده است");
 		}
 
 		return (await this.userRepo.create(registerInput)).toObject();
@@ -17,12 +19,12 @@ export class UserService {
 	async login(loginInput: LoginInput): Promise<IUserDoc> {
 		const authenticatedUser = await this.userRepo.findByEmail(loginInput.email);
 		if (!authenticatedUser) {
-			throw new Error("ایمیل یا رمز عبور اشتباه است");
+			throw new NotAuthorizedError("ایمیل یا رمز عبور اشتباه است");
 		}
 
 		const isPasswordValid = await authenticatedUser.comparePassword(loginInput.password);
 		if (!isPasswordValid) {
-			throw new Error("ایمیل یا رمز عبور اشتباه است");
+			throw new NotAuthorizedError("ایمیل یا رمز عبور اشتباه است");
 		}
 
 		return authenticatedUser.toObject();
