@@ -1,5 +1,6 @@
 import { loginSchema } from "@/features/auth/schema/auth.schema";
 import {
+	connectToDatabase,
 	container,
 	CustomError,
 	RequestValidationError,
@@ -12,6 +13,7 @@ import z from "zod";
 
 export async function POST(req: NextRequest) {
 	try {
+		await connectToDatabase();
 		const body = await req.json();
 
 		const parsed = loginSchema.safeParse(body);

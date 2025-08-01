@@ -59,6 +59,6 @@ userSchema.methods.comparePassword = async function (password: string): Promise<
 
 // Create model if it doesn't exist
 const UserModel =
-	mongoose.models.User || mongoose.model<IUserDoc, IUserModel>("User", userSchema);
+	mongoose.models?.User || mongoose.model<IUserDoc, IUserModel>("User", userSchema);
 
 export { UserModel };

@@ -21,7 +21,7 @@ export function RegisterForm() {
 			await registerUser(data).unwrap();
 			router.push(searchParams.get("redirect") || "/");
 		} catch (err) {
-			toast.error((err as any).data.error);
+			toast.error((err as any).data.errors[0].message);
 		}
 	};
 

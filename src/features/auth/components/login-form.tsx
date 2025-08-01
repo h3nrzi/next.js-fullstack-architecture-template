@@ -21,7 +21,7 @@ export default function LoginForm() {
 			await login(data).unwrap();
 			router.push(searchParams.get("redirect") || "/");
 		} catch (err) {
-			toast.error((err as any).data.error);
+			toast.error((err as any).data.errors[0].message);
 		}
 	};
 
