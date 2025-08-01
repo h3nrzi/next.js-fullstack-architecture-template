@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 			throw new RequestValidationError(treeified);
 		}
 
-		const user = await container.userService.login(parsed.data);
+		const user = await container.authService.login(parsed.data);
 
 		const accessToken = signAccessToken(user.id);
 		const refreshToken = signRefreshToken(user.id);
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		console.error(err);
 		return NextResponse.json(
 			{
 				status: "fail",
