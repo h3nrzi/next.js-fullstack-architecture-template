@@ -13,6 +13,7 @@
 		"@reduxjs/toolkit": "^2.8.2",
 		"@tailwindcss/postcss": "^4.1.11",
 		"autoprefixer": "^10.4.21",
+		"bcryptjs": "^3.0.2",
 		"clsx": "^2.1.1",
 		"jose": "^6.0.12",
 		"jsonwebtoken": "^9.0.2",
@@ -27,6 +28,7 @@
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
+		"@types/bcryptjs": "^2.4.6",
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/node": "^20",
 		"@types/react": "^19",

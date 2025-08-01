@@ -1,14 +1,17 @@
-import { User } from "../domain/user.entity";
-import { UserRepository } from "../infrastructure/user.repository";
+import { IUser, IUserDoc } from "../domain/user.interface";
+import { UserRepository } from "../infra/user.repository";
 
 export class UserService {
 	constructor(private readonly userRepo: UserRepository) {}
 
-	async register(name: string, email: string): Promise<User> {
-		const existing = await this.userRepo.findByEmail(email);
-		if (existing) throw new Error("User already exists");
+	async register(user: IUser): Promise<IUserDoc> {
+		const existingUser = await this.userRepo.findByEmail(
+			user.email,
+		);
+		if (existingUser) {
+			throw new Error("User Already registered!");
+		}
 
-		const user = new User("", name, email);
-		return await this.userRepo.create(user);
+		return (await this.userRepo.create(user)).toObject();
 	}
 }
