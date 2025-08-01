@@ -1,16 +1,16 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import toast from "react-hot-toast";
 import { RegisterInput, registerSchema } from "../schema/auth.schema";
 import { useRegisterMutation } from "../services/auth.api";
-import { useRouter, useSearchParams } from "next/navigation";
 
 export function RegisterForm() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const [registerUser, { isLoading, error }] = useRegisterMutation();
+	const [registerUser, { isLoading }] = useRegisterMutation();
 
 	const { register, handleSubmit, formState } = useForm<RegisterInput>({
 		resolver: zodResolver(registerSchema),
@@ -21,7 +21,7 @@ export function RegisterForm() {
 			await registerUser(data).unwrap();
 			router.push(searchParams.get("redirect") || "/");
 		} catch (err) {
-			console.error("Registration error:", err);
+			toast.error((err as any).data.error);
 		}
 	};
 
@@ -64,8 +64,6 @@ export function RegisterForm() {
 			>
 				{isLoading ? "Registering..." : "Register"}
 			</button>
-
-			{error && <p className="text-red-600 text-sm text-center">Registration failed</p>}
 		</form>
 	);
 }

@@ -39,7 +39,7 @@ export async function middleware(req: NextRequest) {
 }
 
 function redirectToLogin(req: NextRequest) {
-	const loginUrl = new URL("/login", req.url);
+	const loginUrl = new URL("/auth/login", req.url);
 
 	loginUrl.searchParams.set("redirect", req.nextUrl.pathname);
 	return NextResponse.redirect(loginUrl);

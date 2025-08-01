@@ -9,7 +9,7 @@ export const authApi = createApi({
 		return {
 			register: builder.mutation<AuthPayload, RegisterInput>({
 				query: (args) => ({
-					url: "/auth/login",
+					url: "/auth/register",
 					method: "POST",
 					body: args,
 				}),

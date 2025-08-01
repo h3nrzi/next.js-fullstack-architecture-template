@@ -1,16 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { LoginInput, loginSchema } from "../schema/auth.schema";
 import { useLoginMutation } from "../services/auth.api";
 
 export default function LoginForm() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const [login, { isLoading, error }] = useLoginMutation();
+	const [login, { isLoading }] = useLoginMutation();
 
 	const { register, handleSubmit, formState } = useForm<LoginInput>({
 		resolver: zodResolver(loginSchema),
@@ -21,7 +21,7 @@ export default function LoginForm() {
 			await login(data).unwrap();
 			router.push(searchParams.get("redirect") || "/");
 		} catch (err) {
-			console.error("Login failed:", err);
+			toast.error((err as any).data.error);
 		}
 	};
 
@@ -55,8 +55,6 @@ export default function LoginForm() {
 			>
 				{isLoading ? "Logging in..." : "Login"}
 			</button>
-
-			{error && <p className="text-red-600 text-sm text-center">Login failed</p>}
 		</form>
 	);
 }
