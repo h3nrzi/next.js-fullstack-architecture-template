@@ -1,4 +1,4 @@
-import { verifyToken } from "@/lib/auth";
+import { verifyToken } from "@/shared";
 import { NextRequest, NextResponse } from "next/server";
 
 // Public paths as a Set for O(1) lookup

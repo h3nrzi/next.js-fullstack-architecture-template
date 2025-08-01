@@ -1,8 +1,8 @@
 import { LoginInput, RegisterInput } from "@/features/auth/schema/auth.schema";
-import { NotAuthorizedError } from "@/lib/errors/not-authorized-error";
-import { BadRequestError } from "@/lib/errors/bad-request-error";
-import { IUserDoc } from "../domain/user.interface";
-import { UserRepository } from "../infra/user.repository";
+import { NotAuthorizedError } from "@/shared/errors/not-authorized-error";
+import { BadRequestError } from "@/shared/errors/bad-request-error";
+import { IUserDoc } from "../entities/user.interface";
+import { UserRepository } from "../repositories/user.repository";
 
 export class UserService {
 	constructor(private readonly userRepo: UserRepository) {}

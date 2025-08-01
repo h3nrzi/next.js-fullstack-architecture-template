@@ -1,11 +1,11 @@
 import {
+	CustomError,
+	NotAuthorizedError,
 	setAuthCookies,
 	signAccessToken,
 	signRefreshToken,
 	verifyToken,
-} from "@/lib/auth";
-import { CustomError } from "@/lib/errors/custom-error";
-import { NotAuthorizedError } from "@/lib/errors/not-authorized-error";
+} from "@/shared";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 

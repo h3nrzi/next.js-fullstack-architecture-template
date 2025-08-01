@@ -1,12 +1,15 @@
-import { z } from "zod";
-
-import { connectToDatabase } from "@/core/database";
-import { container } from "@/core/di-container";
 import { registerSchema } from "@/features/auth/schema/auth.schema";
-import { setAuthCookies, signAccessToken, signRefreshToken } from "@/lib/auth";
-import { CustomError } from "@/lib/errors/custom-error";
-import { RequestValidationError } from "@/lib/errors/request-validation-error";
+import {
+	connectToDatabase,
+	container,
+	CustomError,
+	RequestValidationError,
+	setAuthCookies,
+	signAccessToken,
+	signRefreshToken,
+} from "@/shared";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 export async function POST(req: NextRequest) {
 	try {
