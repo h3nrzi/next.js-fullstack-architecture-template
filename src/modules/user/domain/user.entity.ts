@@ -53,7 +53,6 @@ userSchema.pre("save", async function (next) {
 
 // Create model if it doesn't exist
 const UserModel =
-	mongoose.models.User ||
-	mongoose.model<IUserDoc, IUserModel>("User", userSchema);
+	mongoose.models.User || mongoose.model<IUserDoc, IUserModel>("User", userSchema);
 
 export { UserModel };

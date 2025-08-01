@@ -1,12 +1,6 @@
-import {
-	createApi,
-	fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { AuthPayload } from "../types";
-import type {
-	RegisterInput,
-	LoginInput,
-} from "../schema/auth.schema";
+import type { RegisterInput, LoginInput } from "../schema/auth.schema";
 
 export const authApi = createApi({
 	reducerPath: "authApi",

@@ -25,10 +25,9 @@ export async function POST() {
 		);
 	}
 
-	const payload = (await verifyToken(
-		refreshToken,
-		process.env.JWT_REFRESH_SECRET!,
-	)) as { userId: string };
+	const payload = (await verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET!)) as {
+		userId: string;
+	};
 
 	if (!payload)
 		return NextResponse.json(
@@ -48,8 +47,5 @@ export async function POST() {
 	const newRefreshToken = signRefreshToken(payload.userId);
 	await setAuthCookies(newAccessToken, newRefreshToken);
 
-	return NextResponse.json(
-		{ status: "success" },
-		{ status: 200 },
-	);
+	return NextResponse.json({ status: "success" }, { status: 200 });
 }

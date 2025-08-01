@@ -1,9 +1,5 @@
 import { loginSchema } from "@/features/auth/schema/auth.schema";
-import {
-	setAuthCookies,
-	signAccessToken,
-	signRefreshToken,
-} from "@/lib/auth";
+import { setAuthCookies, signAccessToken, signRefreshToken } from "@/lib/auth";
 import { normalizeZodError } from "@/lib/normalize-zod-error";
 import { NextResponse } from "next/server";
 import z from "zod";

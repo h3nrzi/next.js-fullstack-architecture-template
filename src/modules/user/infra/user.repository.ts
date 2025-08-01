@@ -1,8 +1,4 @@
-import {
-	IUser,
-	IUserDoc,
-	IUserModel,
-} from "../domain/user.interface";
+import { IUser, IUserDoc, IUserModel } from "../domain/user.interface";
 
 export class UserRepository {
 	constructor(private readonly userModel: IUserModel) {}

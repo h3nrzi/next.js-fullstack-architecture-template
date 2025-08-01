@@ -9,12 +9,8 @@ type NormalizedErrorResponse = {
 	}[];
 };
 
-export function normalizeZodError(
-	input: ZodTreeifiedError,
-): NormalizedErrorResponse {
-	const fieldErrors = Object.entries(
-		input.properties ?? {},
-	).flatMap(([field, details]) =>
+export function normalizeZodError(input: ZodTreeifiedError): NormalizedErrorResponse {
+	const fieldErrors = Object.entries(input.properties ?? {}).flatMap(([field, details]) =>
 		details.errors.map((msg) => ({
 			field,
 			message: msg,

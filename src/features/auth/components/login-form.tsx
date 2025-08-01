@@ -12,10 +12,9 @@ export default function LoginForm() {
 	const router = useRouter();
 	const [login, { isLoading, error }] = useLoginMutation();
 
-	const { register, handleSubmit, formState } =
-		useForm<LoginInput>({
-			resolver: zodResolver(loginSchema),
-		});
+	const { register, handleSubmit, formState } = useForm<LoginInput>({
+		resolver: zodResolver(loginSchema),
+	});
 
 	const onSubmit = async (data: LoginInput) => {
 		try {
@@ -27,10 +26,7 @@ export default function LoginForm() {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="space-y-4 max-w-md mx-auto mt-10"
-		>
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mt-10">
 			<h2 className="text-2xl font-bold text-center">Login</h2>
 
 			<input
@@ -39,9 +35,7 @@ export default function LoginForm() {
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.email && (
-				<p className="text-red-500 text-sm">
-					{formState.errors.email.message}
-				</p>
+				<p className="text-red-500 text-sm">{formState.errors.email.message}</p>
 			)}
 
 			<input
@@ -51,9 +45,7 @@ export default function LoginForm() {
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.password && (
-				<p className="text-red-500 text-sm">
-					{formState.errors.password.message}
-				</p>
+				<p className="text-red-500 text-sm">{formState.errors.password.message}</p>
 			)}
 
 			<button
@@ -64,11 +56,7 @@ export default function LoginForm() {
 				{isLoading ? "Logging in..." : "Login"}
 			</button>
 
-			{error && (
-				<p className="text-red-600 text-sm text-center">
-					Login failed
-				</p>
-			)}
+			{error && <p className="text-red-600 text-sm text-center">Login failed</p>}
 		</form>
 	);
 }

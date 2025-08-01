@@ -3,23 +3,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import {
-	RegisterInput,
-	registerSchema,
-} from "../schema/auth.schema";
+import { RegisterInput, registerSchema } from "../schema/auth.schema";
 import { useRegisterMutation } from "../services/auth.api";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function RegisterForm() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const [registerUser, { isLoading, error }] =
-		useRegisterMutation();
+	const [registerUser, { isLoading, error }] = useRegisterMutation();
 
-	const { register, handleSubmit, formState } =
-		useForm<RegisterInput>({
-			resolver: zodResolver(registerSchema),
-		});
+	const { register, handleSubmit, formState } = useForm<RegisterInput>({
+		resolver: zodResolver(registerSchema),
+	});
 
 	const onSubmit = async (data: RegisterInput) => {
 		try {
@@ -31,13 +26,8 @@ export function RegisterForm() {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="space-y-4 max-w-md mx-auto mt-10"
-		>
-			<h2 className="text-2xl font-bold text-center">
-				Register
-			</h2>
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mt-10">
+			<h2 className="text-2xl font-bold text-center">Register</h2>
 
 			<input
 				{...register("name")}
@@ -45,9 +35,7 @@ export function RegisterForm() {
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.name && (
-				<p className="text-red-500 text-sm">
-					{formState.errors.name.message}
-				</p>
+				<p className="text-red-500 text-sm">{formState.errors.name.message}</p>
 			)}
 
 			<input
@@ -56,9 +44,7 @@ export function RegisterForm() {
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.email && (
-				<p className="text-red-500 text-sm">
-					{formState.errors.email.message}
-				</p>
+				<p className="text-red-500 text-sm">{formState.errors.email.message}</p>
 			)}
 
 			<input
@@ -68,9 +54,7 @@ export function RegisterForm() {
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.password && (
-				<p className="text-red-500 text-sm">
-					{formState.errors.password.message}
-				</p>
+				<p className="text-red-500 text-sm">{formState.errors.password.message}</p>
 			)}
 
 			<button
@@ -81,11 +65,7 @@ export function RegisterForm() {
 				{isLoading ? "Registering..." : "Register"}
 			</button>
 
-			{error && (
-				<p className="text-red-600 text-sm text-center">
-					Registration failed
-				</p>
-			)}
+			{error && <p className="text-red-600 text-sm text-center">Registration failed</p>}
 		</form>
 	);
 }
