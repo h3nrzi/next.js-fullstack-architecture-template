@@ -5,7 +5,7 @@ import { JWTPayload, jwtVerify } from "jose";
 export function signAccessToken(userId: string): string {
 	return jwt.sign(
 		{
-			userId,
+			sub: userId,
 		},
 		process.env.JWT_ACCESS_SECRET!,
 		{
@@ -17,7 +17,7 @@ export function signAccessToken(userId: string): string {
 export function signRefreshToken(userId: string): string {
 	return jwt.sign(
 		{
-			userId,
+			sub: userId,
 		},
 		process.env.JWT_REFRESH_SECRET!,
 		{

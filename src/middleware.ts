@@ -5,11 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 const PUBLIC_PATHS = new Set(["/login", "/register", "/api/auth"]);
 
 // Protected paths
-const PROTECTED_PATHS = ["/dashboard", "/profile"];
+const PROTECTED_PATHS = ["/dashboard", "/profile", "/api/users"];
 
 // Configuration for matcher
 export const config = {
-	matcher: ["/dashboard/:path*", "/profile/:path*", "/api/:path*"],
+	matcher: ["/dashboard/:path*", "/profile/:path*", "/api/users/:path*", "/api/auth/:path*"],
 };
 
 export async function middleware(req: NextRequest) {
