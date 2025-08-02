@@ -1,16 +1,16 @@
 "use client";
 
 import React, { createContext } from "react";
+import { toast } from "react-hot-toast";
 import {
 	useGetCurrentUserQuery,
 	useLoginMutation,
-	useRegisterMutation,
 	useLogoutMutation,
+	useRegisterMutation,
+	authApi,
 } from "../services/auth.api";
+import { useDispatch } from "react-redux";
 import type { ApiResponse, User } from "../types";
-import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-
 export interface AuthContextType {
 	loginRequest: (email: string, password: string) => Promise<void>;
 	logoutRequest: () => Promise<void>;
@@ -25,7 +25,7 @@ export interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-	const router = useRouter();
+	const dispatch = useDispatch();
 
 	const {
 		data: currentUser,
@@ -69,9 +69,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const logoutRequest = async (): Promise<void> => {
 		try {
 			await logoutMutation().unwrap();
-			// NOTE: RTK Query will automatically refetch getCurrentUser due to invalidatesTags
 
-			router.refresh();
+			// Clear RTK Query cache and reset auth state
+			dispatch(authApi.util.resetApiState());
+
 			toast.success("خروج با موفقیت انجام شد");
 		} catch (error: any) {
 			toast.error((error as ApiResponse)?.errors?.[0]?.message || "خروج با خطا مواجه شد");

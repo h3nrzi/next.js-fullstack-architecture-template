@@ -3,7 +3,7 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const DashboardPage = () => {
-	const { currentUser, loading, error, logoutRequest, refetchCurrentUser } = useAuth();
+	const { currentUser, loading, error, logoutRequest } = useAuth();
 
 	if (!currentUser) return;
 
@@ -76,10 +76,7 @@ const DashboardPage = () => {
 										</h3>
 										<div className="space-y-3">
 											<button
-												onClick={async () => {
-													await logoutRequest();
-													refetchCurrentUser();
-												}}
+												onClick={async () => await logoutRequest()}
 												className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200"
 											>
 												Logout
