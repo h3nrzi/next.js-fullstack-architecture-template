@@ -24,13 +24,12 @@ export default function Navbar() {
 							<div className="text-gray-500">Loading...</div>
 						) : isAuthenticated && currentUser ? (
 							<>
-								<span className="text-gray-700">Welcome, {currentUser.name}</span>
 								<Link href="/dashboard" className="text-gray-700 hover:text-gray-900">
 									Dashboard
 								</Link>
 								<button
 									onClick={async () => await logoutRequest()}
-									className="text-gray-700 hover:text-gray-900"
+									className="text-gray-700 hover:text-gray-900 cursor-pointer"
 								>
 									Logout
 								</button>

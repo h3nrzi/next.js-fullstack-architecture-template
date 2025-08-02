@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import { PropsWithChildren } from "react";
 import { AppProviders } from "./providers";
 import ReactHotToast from "./react-hot-toast";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
 
 export default function RootLayout({ children }: PropsWithChildren) {
 	return (
