@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 export default function NavBar() {
 	const { currentUser, isAuthenticated, loading, logoutRequest } = useAuth();
 	const t = useTranslations("NavBar");
+	const pathname = usePathname();
 
 	return (
 		<nav className="bg-white shadow-sm border-b">
@@ -27,7 +28,7 @@ export default function NavBar() {
 							<div className="text-gray-500">{t("loading")}</div>
 						) : isAuthenticated && currentUser ? (
 							<>
-								<LanguageSwitcher />
+								{pathname === "/" && <LanguageSwitcher />}
 								<Link href="/dashboard" className="text-gray-700 hover:text-gray-900">
 									{t("dashboard")}
 								</Link>
@@ -40,7 +41,7 @@ export default function NavBar() {
 							</>
 						) : (
 							<>
-								<LanguageSwitcher />
+								{pathname === "/" && <LanguageSwitcher />}
 								<Link href="/auth/login" className="text-gray-700 hover:text-gray-900">
 									{t("login")}
 								</Link>

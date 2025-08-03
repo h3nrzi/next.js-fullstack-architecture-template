@@ -4,7 +4,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useTranslations } from "next-intl";
 
 const DashboardPage = () => {
-	const { currentUser, loading, error, logoutRequest } = useAuth();
+	const { currentUser, loading, error } = useAuth();
 	const t = useTranslations("DashboardPage");
 
 	if (!currentUser) return;
