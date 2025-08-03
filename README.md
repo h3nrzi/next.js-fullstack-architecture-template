@@ -117,6 +117,12 @@ src/
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+### Internationalization
+
+- **Multiple Language Support**: English and Farsi
+- **Localized Routing**: Language-specific routes
+- **Automatic Language Detection**
+
 ## 🏛️ Architecture Patterns
 
 ### Domain-Driven Design (DDD)
