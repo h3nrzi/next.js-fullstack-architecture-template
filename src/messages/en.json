@@ -1,0 +1,41 @@
+{
+    "HomePage": {
+        "welcome": "Welcome to Next.js Fullstack Template",
+        "description": "This is a template for building fullstack applications with Next.js",
+        "dashboard": "Dashboard"
+    },
+    "LoginPage": {
+        "title": "Login",
+        "emailPlaceholder": "Enter your email",
+        "passwordPlaceholder": "Enter your password",
+        "buttonTXT": "Login",
+        "buttonLoading": "Loading..."
+    },
+    "RegisterPage": {
+        "title": "Register",
+        "namePlaceholder": "Enter your email",
+        "emailPlaceholder": "Enter your email",
+        "passwordPlaceholder": "Enter your password",
+        "buttonTXT": "Register",
+        "buttonLoading": "Loading..."
+    },
+    "NavBar": {
+        "title": "LOGO",
+        "loading": "Loading...",
+        "dashboard": "Dashboard",
+        "logout": "Logout",
+        "login": "Login",
+        "register": "Register"
+    },
+    "DashboardPage": {
+        "title": "Dashboard",
+        "loading": "Loading...",
+        "error": "Error:",
+        "welcomeBack": "Welcome back, {name}!",
+        "successMessage": "You're successfully logged in to your account.",
+        "profileInfo": "Profile Information",
+        "name": "Name:",
+        "email": "Email:",
+        "userId": "User ID:"
+    }
+}

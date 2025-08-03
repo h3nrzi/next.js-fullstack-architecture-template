@@ -11,6 +11,7 @@ import {
 } from "../services/auth.api";
 import { useDispatch } from "react-redux";
 import type { ApiResponse, User } from "../types";
+import { useRouter } from "next/navigation";
 export interface AuthContextType {
 	loginRequest: (email: string, password: string) => Promise<void>;
 	logoutRequest: () => Promise<void>;
@@ -26,6 +27,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const dispatch = useDispatch();
+	const router = useRouter();
 
 	const {
 		data: currentUser,
@@ -74,6 +76,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			dispatch(authApi.util.resetApiState());
 
 			toast.success("خروج با موفقیت انجام شد");
+
+			router.refresh();
 		} catch (error: any) {
 			toast.error((error as ApiResponse)?.errors?.[0]?.message || "خروج با خطا مواجه شد");
 		}

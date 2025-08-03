@@ -6,10 +6,12 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { LoginInput, loginSchema } from "../schema/auth.schema";
 import { useLoginMutation } from "../services/auth.api";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
+	const t = useTranslations("LoginPage");
 	const [login, { isLoading }] = useLoginMutation();
 
 	const { register, handleSubmit, formState } = useForm<LoginInput>({
@@ -27,11 +29,11 @@ export default function LoginForm() {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mt-10">
-			<h2 className="text-2xl font-bold text-center">Login</h2>
+			<h2 className="text-2xl font-bold text-center">{t("title")}</h2>
 
 			<input
 				{...register("email")}
-				placeholder="Email"
+				placeholder={t("emailPlaceholder")}
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.email && (
@@ -41,7 +43,7 @@ export default function LoginForm() {
 			<input
 				{...register("password")}
 				type="password"
-				placeholder="Password"
+				placeholder={t("passwordPlaceholder")}
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.password && (
@@ -53,7 +55,7 @@ export default function LoginForm() {
 				disabled={isLoading}
 				className="bg-blue-600 text-white px-4 py-2 rounded w-full cursor-pointer"
 			>
-				{isLoading ? "Logging in..." : "Login"}
+				{isLoading ? t("buttonLoading") : t("buttonTXT")}
 			</button>
 		</form>
 	);

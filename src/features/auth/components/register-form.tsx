@@ -1,7 +1,8 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { RegisterInput, registerSchema } from "../schema/auth.schema";
@@ -11,6 +12,7 @@ export function RegisterForm() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const [registerUser, { isLoading }] = useRegisterMutation();
+	const t = useTranslations("RegisterPage");
 
 	const { register, handleSubmit, formState } = useForm<RegisterInput>({
 		resolver: zodResolver(registerSchema),
@@ -27,11 +29,11 @@ export function RegisterForm() {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mt-10">
-			<h2 className="text-2xl font-bold text-center">Register</h2>
+			<h2 className="text-2xl font-bold text-center">{t("title")}</h2>
 
 			<input
 				{...register("name")}
-				placeholder="Full Name"
+				placeholder={t("namePlaceholder")}
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.name && (
@@ -40,7 +42,7 @@ export function RegisterForm() {
 
 			<input
 				{...register("email")}
-				placeholder="Email"
+				placeholder={t("emailPlaceholder")}
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.email && (
@@ -50,7 +52,7 @@ export function RegisterForm() {
 			<input
 				{...register("password")}
 				type="password"
-				placeholder="Password"
+				placeholder={t("passwordPlaceholder")}
 				className="w-full p-2 border rounded"
 			/>
 			{formState.errors.password && (
@@ -62,7 +64,7 @@ export function RegisterForm() {
 				disabled={isLoading}
 				className="bg-green-600 text-white px-4 py-2 rounded w-full cursor-pointer"
 			>
-				{isLoading ? "Registering..." : "Register"}
+				{isLoading ? t("buttonLoading") : t("buttonTXT")}
 			</button>
 		</form>
 	);

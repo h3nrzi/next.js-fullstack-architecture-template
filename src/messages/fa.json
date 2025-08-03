@@ -1,0 +1,41 @@
+{
+    "HomePage": {
+        "welcome": "به next.js fullstack template خوش آمدید",
+        "description": "این یک تمپلت برای ساخت برنامه های fullstack با next.js است",
+        "dashboard": "داشبورد"
+    },
+    "LoginPage": {
+        "title": "ورود",
+        "emailPlaceholder": "ایمیل خود را وارد کنید",
+        "passwordPlaceholder": "رمز خود را وارد کنید",
+        "buttonTXT": "ورود",
+        "buttonLoading": "در حال ورود..."
+    },
+    "RegisterPage": {
+        "title": "ثبت نام",
+        "namePlaceholder": "نام خود را وارد کنید",
+        "emailPlaceholder": "ایمیل خود را وارد کنید",
+        "passwordPlaceholder": "رمز خود را وارد کنید",
+        "buttonTXT": "ثبت نام",
+        "buttonLoading": "در حال ثبت نام..."
+    },
+    "NavBar": {
+        "title": "LOGO",
+        "loading": "در حال بارگذاری...",
+        "dashboard": "داشبورد",
+        "logout": "خروج",
+        "login": "ورود",
+        "register": "ثبت نام"
+    },
+    "DashboardPage": {
+        "title": "داشبورد",
+        "loading": "در حال بارگذاری...",
+        "error": "خطا:",
+        "welcomeBack": "خوش آمدید، {name}!",
+        "successMessage": "شما با موفقیت وارد حساب کاربری خود شده‌اید.",
+        "profileInfo": "اطلاعات پروفایل",
+        "name": "نام:",
+        "email": "ایمیل:",
+        "userId": "شناسه کاربری:"
+    }
+}

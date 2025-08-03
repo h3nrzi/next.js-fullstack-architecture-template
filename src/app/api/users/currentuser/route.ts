@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
 	try {
 		// Get user ID from the header set by middleware
 		const userId = req.headers.get("x-user-id");
-		
+
 		if (!userId) {
 			throw new NotAuthorizedError("کاربر وارد سیستم نشده است");
 		}

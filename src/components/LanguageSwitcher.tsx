@@ -1,0 +1,37 @@
+"use client";
+
+import { useLocale } from "next-intl";
+import { useRouter, usePathname } from "next/navigation";
+import { routing } from "@/i18n/routing";
+
+export default function LanguageSwitcher() {
+	const locale = useLocale();
+	const router = useRouter();
+	const pathname = usePathname();
+
+	const switchLanguage = (newLocale: string) => {
+		// Remove the current locale from the pathname
+		const currentPath = pathname.replace(`/${locale}`, "");
+
+		// Navigate to the new locale
+		router.push(`/${newLocale}${currentPath}`);
+	};
+
+	return (
+		<div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+			{routing.locales.map((loc) => (
+				<button
+					key={loc}
+					onClick={() => switchLanguage(loc)}
+					className={`px-3 py-1 rounded-md text-sm font-medium transition-all duration-200 ${
+						locale === loc
+							? "bg-white text-gray-900 shadow-sm cursor-pointer"
+							: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 cursor-pointer"
+					}`}
+				>
+					{loc === "en" ? "EN" : "فا"}
+				</button>
+			))}
+		</div>
+	);
+}
