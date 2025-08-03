@@ -1,4 +1,4 @@
-import { verifyToken } from "@/shared";
+import { verifyToken } from "@/shared/auth/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
 import createMiddleware from "next-intl/middleware";
