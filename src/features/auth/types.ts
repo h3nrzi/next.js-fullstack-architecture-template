@@ -2,12 +2,11 @@ export interface User {
 	id: string;
 	name: string;
 	email: string;
+	role: string;
 }
 
 export interface AuthPayload {
 	user: User;
-	accessToken: string;
-	refreshToken: string;
 }
 
 // API Response types

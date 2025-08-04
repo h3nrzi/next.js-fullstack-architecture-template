@@ -72,3 +72,20 @@ export async function clearAuthCookies(): Promise<void> {
 	cookieStore.set("accessToken", "", { maxAge: 0 });
 	cookieStore.set("refreshToken", "", { maxAge: 0 });
 }
+
+export async function getUserFromRequest(): Promise<{ id: string; role: string } | null> {
+	const cookieStore = await cookies();
+	const token = cookieStore.get("accessToken")?.value;
+	if (!token) return null;
+
+	const secret = process.env.JWT_ACCESS_SECRET;
+	if (!secret) throw new Error("JWT_ACCESS_SECRET is not set");
+
+	const payload = (await verifyToken(token, secret)) as { sub: string; role: string };
+	if (!payload) return null;
+
+	return {
+		id: payload.sub,
+		role: payload.role,
+	};
+}

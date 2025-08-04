@@ -1,18 +1,27 @@
-import { useTranslations } from "next-intl";
+"use client";
+
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 function HomePage() {
 	const t = useTranslations("HomePage");
+	const { currentUser } = useAuth();
 
 	return (
 		<div className="p-8 flex flex-col gap-2">
 			<h1 className="text-3xl font-bold">{t("welcome")}</h1>
 			<p className="text-lg text-gray-600">{t("description")}</p>
-			<Link href="/dashboard">
-				<button className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer">
-					{t("dashboard")}
-				</button>
-			</Link>
+			{currentUser && (
+				<div className="flex flex-row gap-2 items-center h-screen justify-start">
+					<p>{t("adminDashboardDescription")}</p>
+					<Link href="/admin/dashboard">
+						<button className="bg-red-500 text-white px-2 py-1 rounded-md cursor-pointer hover:bg-red-600 transition-all duration-300">
+							{t("adminDashboard")}
+						</button>
+					</Link>
+				</div>
+			)}
 		</div>
 	);
 }

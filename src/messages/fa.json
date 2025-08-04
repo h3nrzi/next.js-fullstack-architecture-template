@@ -2,7 +2,8 @@
     "HomePage": {
         "welcome": "به next.js fullstack template خوش آمدید",
         "description": "این یک تمپلت برای ساخت برنامه های fullstack با next.js است",
-        "dashboard": "داشبورد"
+        "adminDashboard": "داشبورد ادمین",
+        "adminDashboardDescription": "اگر شما ادمین هستید، می توانید به داشبورد ادمین دسترسی داشته باشید"
     },
     "LoginPage": {
         "title": "ورود",

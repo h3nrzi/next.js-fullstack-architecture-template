@@ -2,7 +2,8 @@
     "HomePage": {
         "welcome": "Welcome to Next.js Fullstack Template",
         "description": "This is a template for building fullstack applications with Next.js",
-        "dashboard": "Dashboard"
+        "adminDashboard": "Admin Dashboard",
+        "adminDashboardDescription": "If you are admin, you can access the admin dashboard"
     },
     "LoginPage": {
         "title": "Login",
