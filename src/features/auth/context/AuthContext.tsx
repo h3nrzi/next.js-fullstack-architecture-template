@@ -44,8 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		try {
 			await loginMutation({ email, password }).unwrap();
 			// NOTE: RTK Query will automatically refetch getCurrentUser due to invalidatesTags
-
 			toast.success("ورود با موفقیت انجام شد");
+			router.push("/");
 		} catch (error: any) {
 			toast.error((error as ApiResponse)?.errors?.[0]?.message || "ورود با خطا مواجه شد");
 		}
@@ -59,8 +59,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		try {
 			await registerMutation({ name, email, password }).unwrap();
 			// NOTE: RTK Query will automatically refetch getCurrentUser due to invalidatesTags
-
 			toast.success("ثبت نام با موفقیت انجام شد");
+			router.push("/");
 		} catch (error) {
 			toast.error(
 				(error as ApiResponse)?.errors?.[0]?.message || "ثبت نام با خطا مواجه شد",
@@ -71,12 +71,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const logoutRequest = async (): Promise<void> => {
 		try {
 			await logoutMutation().unwrap();
-
 			// Clear RTK Query cache and reset auth state
 			dispatch(authApi.util.resetApiState());
-
 			toast.success("خروج با موفقیت انجام شد");
-
 			router.refresh();
 		} catch (error: any) {
 			toast.error((error as ApiResponse)?.errors?.[0]?.message || "خروج با خطا مواجه شد");

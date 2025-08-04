@@ -1,34 +1,26 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { LoginInput, loginSchema } from "../schema/auth.schema";
-import { useLoginMutation } from "../services/auth.api";
 import { useTranslations } from "next-intl";
+import { useAuth } from "../hooks/useAuth";
 
 export default function LoginForm() {
-	const searchParams = useSearchParams();
-	const router = useRouter();
 	const t = useTranslations("LoginPage");
-	const [login, { isLoading }] = useLoginMutation();
+	const { loginRequest } = useAuth();
 
 	const { register, handleSubmit, formState } = useForm<LoginInput>({
 		resolver: zodResolver(loginSchema),
 	});
 
-	const onSubmit = async (data: LoginInput) => {
-		try {
-			await login(data).unwrap();
-			router.push(searchParams.get("redirect") || "/");
-		} catch (err) {
-			toast.error((err as any).data.errors[0].message);
-		}
-	};
-
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto mt-10">
+		<form
+			onSubmit={handleSubmit(async (data) => {
+				await loginRequest(data.email, data.password);
+			})}
+			className="space-y-4 max-w-md mx-auto mt-10"
+		>
 			<h2 className="text-2xl font-bold text-center">{t("title")}</h2>
 
 			<input
@@ -52,10 +44,10 @@ export default function LoginForm() {
 
 			<button
 				type="submit"
-				disabled={isLoading}
+				disabled={formState.isSubmitting}
 				className="bg-blue-600 text-white px-4 py-2 rounded w-full cursor-pointer"
 			>
-				{isLoading ? t("buttonLoading") : t("buttonTXT")}
+				{formState.isSubmitting ? t("buttonLoading") : t("buttonTXT")}
 			</button>
 		</form>
 	);
