@@ -15,7 +15,9 @@ function matchesPrefix(pathname: string, prefixes: string[]) {
 
 function getRouteAccessLevel(pathname: string, type: "api" | "page"): AccessLevel | null {
 	for (const level of ["public", "protected", "admin"] as AccessLevel[]) {
-		if (matchesPrefix(pathname, routeAccess[type][level])) return level;
+		if (matchesPrefix(pathname, routeAccess[type][level])) {
+			return level;
+		}
 	}
 	return null;
 }
@@ -93,11 +95,7 @@ async function handlePageAuth(req: NextRequest) {
 		return redirectToForbidden(req);
 	}
 
-	const response = intlMiddleware(req);
-	response.headers.set("x-user-id", payload.sub ?? "");
-	response.headers.set("x-user-role", payload.role ?? "");
-
-	return response;
+	return intlMiddleware(req);
 }
 
 // Redirection for unauthenticated users
