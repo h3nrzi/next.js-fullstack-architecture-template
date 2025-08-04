@@ -24,11 +24,11 @@ export default function NavBar() {
 
 					{/* *********** NAVIGATION *********** */}
 					<div className="flex items-center space-x-4">
+						<LanguageSwitcher />
 						{loading ? (
 							<div className="text-gray-500">{t("loading")}</div>
 						) : isAuthenticated && currentUser ? (
 							<>
-								{pathname === "/" && <LanguageSwitcher />}
 								<Link href="/dashboard" className="text-gray-700 hover:text-gray-900">
 									{t("dashboard")}
 								</Link>
@@ -41,7 +41,6 @@ export default function NavBar() {
 							</>
 						) : (
 							<>
-								{pathname === "/" && <LanguageSwitcher />}
 								<Link href="/auth/login" className="text-gray-700 hover:text-gray-900">
 									{t("login")}
 								</Link>

@@ -25,7 +25,7 @@ export default function LanguageSwitcher() {
 							: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 cursor-pointer"
 					}`}
 				>
-					{loc === "en" ? "EN" : "فا"}
+					{loc === "en" ? "🇬🇧 EN" : "فا 🇮🇷"}
 				</button>
 			))}
 		</div>

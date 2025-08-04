@@ -23,12 +23,13 @@ export async function POST() {
 			process.env.JWT_REFRESH_SECRET!,
 		)) as {
 			userId: string;
+			role: string;
 		};
 		if (!payload) {
 			throw new NotAuthorizedError("رفرش توکن نامعتبر است");
 		}
 
-		const newAccessToken = signAccessToken(payload.userId);
+		const newAccessToken = signAccessToken(payload.userId, payload.role);
 		const newRefreshToken = signRefreshToken(payload.userId);
 		await setAuthCookies(newAccessToken, newRefreshToken);
 
