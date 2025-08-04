@@ -14,7 +14,7 @@ export default function LanguageSwitcher() {
 	};
 
 	return (
-		<div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+		<div className="flex items-center gap-2 bg-gray-200 rounded-lg p-1">
 			{routing.locales.map((loc) => (
 				<button
 					key={loc}

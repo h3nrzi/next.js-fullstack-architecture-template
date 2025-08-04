@@ -8,7 +8,7 @@ export const routeAccess: RouteAccessMap = {
 	},
 	page: {
 		public: ["/auth/login", "/auth/register"],
-		protected: ["/dashboard", "/profile"],
-		admin: ["/dashboard/admin"],
+		protected: ["/user/dashboard", "/user/profile"],
+		admin: ["/admin/dashboard"],
 	},
 };
