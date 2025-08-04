@@ -1,11 +1,12 @@
+import { JWTPayload, jwtVerify } from "jose";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { JWTPayload, jwtVerify } from "jose";
 
-export function signAccessToken(userId: string): string {
+export function signAccessToken(userId: string, role: string): string {
 	return jwt.sign(
 		{
 			sub: userId,
+			role,
 		},
 		process.env.JWT_ACCESS_SECRET!,
 		{

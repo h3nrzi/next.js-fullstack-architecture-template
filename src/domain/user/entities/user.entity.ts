@@ -19,11 +19,16 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 			type: String,
 			required: true,
 		},
+		role: {
+			type: String,
+			enum: ["admin", "user"],
+			default: "user",
+		},
 	},
 	{
 		toJSON: {
 			transform(doc, ret: any) {
-				ret.id = ret._id as string;
+				ret.id = ret._id.toString();
 				delete ret._id;
 				delete ret.__v;
 				delete ret.password;
@@ -32,7 +37,7 @@ const userSchema = new mongoose.Schema<IUserDoc>(
 		},
 		toObject: {
 			transform(doc, ret: any) {
-				ret.id = ret._id as string;
+				ret.id = ret._id.toString();
 				delete ret._id;
 				delete ret.__v;
 				delete ret.password;

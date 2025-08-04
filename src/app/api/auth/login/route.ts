@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
 		const user = await container.authService.login(parsed.data);
 
-		const accessToken = signAccessToken(user.id);
+		const accessToken = signAccessToken(user.id, user.role);
 		const refreshToken = signRefreshToken(user.id);
 		await setAuthCookies(accessToken, refreshToken);
 
