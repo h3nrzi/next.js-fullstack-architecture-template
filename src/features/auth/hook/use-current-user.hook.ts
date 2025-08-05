@@ -1,6 +1,6 @@
 import { useGetCurrentUserQuery } from "../api/auth.api";
 import { User } from "../types/User";
-import type { UserPayload } from "../types/UserPayload";
+import { UserPayload } from "../types/UserPayload";
 
 interface UseCurrentUserReturn {
 	userPayload: UserPayload<User> | null;
