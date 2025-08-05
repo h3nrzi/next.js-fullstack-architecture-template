@@ -3,11 +3,11 @@ import { PropsWithChildren } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import {
-	authApi,
+	usersApi,
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
-} from "../api/auth.api";
+} from "../api/users.api";
 import { AuthContext } from "../context/auth.context";
 import { AuthContextType } from "../types/AuthContextType";
 import { RTKQueryErrorResponse } from "../types/RTKQueryErrorResponse";
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 		try {
 			await logoutMutation().unwrap();
 			// Clear RTK Query cache and reset auth state
-			dispatch(authApi.util.resetApiState());
+			dispatch(usersApi.util.resetApiState());
 			toast.success("خروج با موفقیت انجام شد");
 			router.refresh();
 		} catch (error: any) {

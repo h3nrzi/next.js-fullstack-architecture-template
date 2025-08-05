@@ -1,5 +1,8 @@
+import { TAG_TYPES } from "@/constants/tag-type";
 import { ServerDataResponse } from "@/features/users/types/ServerDataResponse";
 import { UserPayload } from "@/features/users/types/UserPayload";
+import { LoginInput } from "../types/LoginInput";
+import { RegisterInput } from "../types/RegisterInput";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQueryWithAuth = fetchBaseQuery({
@@ -19,16 +22,44 @@ const transformResponse = (response: ServerDataResponse<UserPayload>) => {
 export const usersApi = createApi({
 	reducerPath: "usersApi",
 	baseQuery: baseQueryWithAuth,
-	tagTypes: ["User"],
+	tagTypes: [TAG_TYPES.USER],
 	endpoints(builder) {
 		return {
 			getCurrentUser: builder.query<UserPayload, void>({
 				query: () => "/users/currentuser",
 				transformResponse,
-				providesTags: ["User"],
+				providesTags: [TAG_TYPES.USER],
+			}),
+
+			register: builder.mutation<UserPayload, RegisterInput>({
+				query: (args) => ({
+					url: "/auth/register",
+					method: "POST",
+					body: args,
+				}),
+				transformResponse,
+				invalidatesTags: [TAG_TYPES.USER],
+			}),
+
+			login: builder.mutation<UserPayload, LoginInput>({
+				query: (args) => ({
+					url: "/auth/login",
+					method: "POST",
+					body: args,
+				}),
+				transformResponse,
+				invalidatesTags: [TAG_TYPES.USER],
+			}),
+
+			logout: builder.mutation<void, void>({
+				query: () => ({
+					url: "/auth/logout",
+					method: "POST",
+				}),
+				invalidatesTags: [TAG_TYPES.USER],
 			}),
 		};
 	},
 });
 
-export const { useGetCurrentUserQuery } = usersApi;
+export const { useGetCurrentUserQuery, useRegisterMutation, useLoginMutation, useLogoutMutation } = usersApi;
