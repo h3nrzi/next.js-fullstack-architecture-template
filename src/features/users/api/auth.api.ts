@@ -1,9 +1,9 @@
-import { LoginInput, RegisterInput } from "@/features/auth/schema/auth.schema";
-import { ServerDataResponse } from "@/features/auth/types/ServerDataResponse";
-import { UserPayload } from "@/features/auth/types/UserPayload";
+import { LoginInput } from "../types/LoginInput";
+import { RegisterInput } from "../types/RegisterInput";
+import { ServerDataResponse } from "@/features/users/types/ServerDataResponse";
+import { UserPayload } from "@/features/users/types/UserPayload";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Custom base query that includes credentials and handles our API response format
 const baseQueryWithAuth = fetchBaseQuery({
 	baseUrl: "/api",
 	credentials: "include",
@@ -13,7 +13,6 @@ const baseQueryWithAuth = fetchBaseQuery({
 	},
 });
 
-// Transform function to extract data from our API response format
 const transformResponse = (response: ServerDataResponse<UserPayload>) => {
 	if (response.status === "success" && response.data) return response.data;
 	throw new Error("Unexpected response from server");
@@ -52,19 +51,8 @@ export const authApi = createApi({
 				}),
 				invalidatesTags: ["User"],
 			}),
-
-			getCurrentUser: builder.query<UserPayload, void>({
-				query: () => "/users/currentuser",
-				transformResponse,
-				providesTags: ["User"],
-			}),
 		};
 	},
 });
 
-export const {
-	useRegisterMutation,
-	useLoginMutation,
-	useLogoutMutation,
-	useGetCurrentUserQuery,
-} = authApi;
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation } = authApi;

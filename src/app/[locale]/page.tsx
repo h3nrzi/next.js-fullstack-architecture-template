@@ -1,12 +1,12 @@
 "use client";
 
-import { useAuth } from "@/features/auth/hooks/use-auth.hook";
+import { useUsers } from "@/features/users/hooks/use-users.hook";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 function HomePage() {
 	const t = useTranslations("HomePage");
-	const { userPayload } = useAuth();
+	const { userPayload } = useUsers();
 
 	return (
 		<div className="p-8 flex flex-col gap-2">

@@ -1,14 +1,17 @@
 "use client";
 
+import { AuthProvider } from "@/features/users/providers/auth.provider";
+import { UsersProvider } from "@/features/users/providers/users.provider";
+import { PropsWithChildren } from "react";
 import { Provider } from "react-redux";
 import { store } from "@/store";
-import { PropsWithChildren } from "react";
-import { AuthProvider } from "@/features/auth/context/auth.context";
 
 export function AppProviders({ children }: PropsWithChildren) {
 	return (
 		<Provider store={store}>
-			<AuthProvider>{children}</AuthProvider>
+			<AuthProvider>
+				<UsersProvider>{children}</UsersProvider>
+			</AuthProvider>
 		</Provider>
 	);
 }

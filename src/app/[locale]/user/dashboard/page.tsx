@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuth } from "@/features/auth/hooks/use-auth.hook";
 import { useTranslations } from "next-intl";
+import { useUsers } from "@/features/users/hooks/use-users.hook";
 
 const DashboardPage = () => {
-	const { userPayload, loading, error } = useAuth();
+	const { userPayload, loading, error } = useUsers();
 	const t = useTranslations("DashboardPage");
 
 	if (!userPayload) return;

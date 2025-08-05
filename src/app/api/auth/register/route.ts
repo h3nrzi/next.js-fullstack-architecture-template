@@ -1,4 +1,4 @@
-import { registerSchema } from "@/features/auth/schema/auth.schema";
+import { registerSchema } from "@/features/users/schema/auth.schema";
 import {
 	connectToDatabase,
 	container,

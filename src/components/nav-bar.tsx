@@ -1,12 +1,14 @@
 "use client";
 
-import { useAuth } from "@/features/auth/hooks/use-auth.hook";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useUsers } from "@/features/users/hooks/use-users.hook";
+import { useAuth } from "@/features/users/hooks/use-auth.hook";
 
 export default function NavBar() {
-	const { userPayload, loading, logoutRequest } = useAuth();
+	const { userPayload, loading } = useUsers();
+	const { logoutRequest } = useAuth();
 	const t = useTranslations("NavBar");
 
 	return (

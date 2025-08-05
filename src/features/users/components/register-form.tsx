@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import { RegisterInput, registerSchema } from "../schema/auth.schema";
+import { registerSchema } from "../schema/auth.schema";
+import { RegisterInput } from "../types/RegisterInput";
 import { useAuth } from "../hooks/use-auth.hook";
 
 export function RegisterForm() {

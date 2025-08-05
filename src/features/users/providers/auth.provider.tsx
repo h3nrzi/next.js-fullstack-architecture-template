@@ -1,41 +1,20 @@
-"use client";
-
 import { useRouter } from "next/navigation";
-import React, { createContext } from "react";
-import { toast } from "react-hot-toast";
+import { PropsWithChildren } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import {
 	authApi,
-	useGetCurrentUserQuery,
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
 } from "../api/auth.api";
+import { AuthContext } from "../context/auth.context";
+import { AuthContextType } from "../types/AuthContextType";
 import { RTKQueryErrorResponse } from "../types/RTKQueryErrorResponse";
-import type { UserPayload } from "../types/UserPayload";
-export interface AuthContextType {
-	loginRequest: (email: string, password: string) => Promise<void>;
-	logoutRequest: () => Promise<void>;
-	registerRequest: (name: string, email: string, password: string) => Promise<void>;
-	userPayload: UserPayload | null;
-	loading: boolean;
-	error: string | null;
-	isAuthenticated: boolean;
-	refetchCurrentUser: () => void;
-}
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
 	const dispatch = useDispatch();
 	const router = useRouter();
-
-	const {
-		data: userPayload,
-		isLoading,
-		error: currentUserError,
-		refetch: refetchCurrentUser,
-	} = useGetCurrentUserQuery();
 
 	const [loginMutation] = useLoginMutation();
 	const [registerMutation] = useRegisterMutation();
@@ -93,13 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		loginRequest,
 		logoutRequest,
 		registerRequest,
-		userPayload: userPayload || null,
-		loading: isLoading,
-		error:
-			(currentUserError as RTKQueryErrorResponse)?.data?.errors?.[0]?.message || null,
-		isAuthenticated: !!userPayload,
-		refetchCurrentUser,
 	};
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+};

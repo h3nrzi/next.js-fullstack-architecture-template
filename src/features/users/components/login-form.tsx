@@ -2,7 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { LoginInput, loginSchema } from "../schema/auth.schema";
+import { loginSchema } from "../schema/auth.schema";
+import { LoginInput } from "../types/LoginInput";
 import { useTranslations } from "next-intl";
 import { useAuth } from "../hooks/use-auth.hook";
 

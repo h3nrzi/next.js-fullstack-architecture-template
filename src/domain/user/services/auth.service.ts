@@ -1,4 +1,5 @@
-import { LoginInput, RegisterInput } from "@/features/auth/schema/auth.schema";
+import { LoginInput } from "@/features/users/types/LoginInput";
+import { RegisterInput } from "@/features/users/types/RegisterInput";
 import { NotAuthorizedError } from "@/shared/errors/not-authorized-error";
 import { BadRequestError } from "@/shared/errors/bad-request-error";
 import { IUserDoc } from "../entities/user.interface";
