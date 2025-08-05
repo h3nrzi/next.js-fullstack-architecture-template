@@ -1,3 +1,5 @@
-export interface UserPayload<T> {
-	user: T;
+import { User } from "./User";
+
+export interface UserPayload {
+	user: User;
 }

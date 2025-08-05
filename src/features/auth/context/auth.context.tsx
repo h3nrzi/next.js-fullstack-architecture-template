@@ -13,12 +13,11 @@ import {
 } from "../api/auth.api";
 import { RTKQueryErrorResponse } from "../types/RTKQueryErrorResponse";
 import type { UserPayload } from "../types/UserPayload";
-import { User } from "../types/User";
 export interface AuthContextType {
 	loginRequest: (email: string, password: string) => Promise<void>;
 	logoutRequest: () => Promise<void>;
 	registerRequest: (name: string, email: string, password: string) => Promise<void>;
-	userPayload: UserPayload<User> | null;
+	userPayload: UserPayload | null;
 	loading: boolean;
 	error: string | null;
 	isAuthenticated: boolean;

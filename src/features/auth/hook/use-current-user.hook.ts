@@ -1,9 +1,8 @@
 import { useGetCurrentUserQuery } from "../api/auth.api";
-import { User } from "../types/User";
 import { UserPayload } from "../types/UserPayload";
 
 interface UseCurrentUserReturn {
-	userPayload: UserPayload<User> | null;
+	userPayload: UserPayload | null;
 	loading: boolean;
 	error: string | null;
 	refetch: () => void;
