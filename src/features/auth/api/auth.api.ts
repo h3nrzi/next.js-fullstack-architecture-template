@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { CurrentUserResponse } from "../types/current-user-response";
-import type { ApiResponse } from "../types/api-response";
-import type { AuthPayload } from "../types/auth-payload";
-import type { User } from "../types/user";
-import type { RegisterInput, LoginInput } from "../schema/auth.schema";
+import type { LoginInput, RegisterInput } from "../schema/auth.schema";
+import type { ServerDataResponse } from "../types/ServerDataResponse";
+import type { User } from "../types/User";
+import type { UserPayload } from "../types/UserPayload";
 
 // Custom base query that includes credentials and handles our API response format
 const baseQueryWithAuth = fetchBaseQuery({
@@ -16,7 +15,7 @@ const baseQueryWithAuth = fetchBaseQuery({
 });
 
 // Transform function to extract data from our API response format
-const transformResponse = (response: ApiResponse<any>) => {
+const transformResponse = (response: ServerDataResponse<UserPayload<User>>) => {
 	if (response.status === "success" && response.data) return response.data;
 	throw new Error("Unexpected response from server");
 };
@@ -27,7 +26,7 @@ export const authApi = createApi({
 	tagTypes: ["User"],
 	endpoints(builder) {
 		return {
-			register: builder.mutation<AuthPayload, RegisterInput>({
+			register: builder.mutation<UserPayload<User>, RegisterInput>({
 				query: (args) => ({
 					url: "/auth/register",
 					method: "POST",
@@ -37,7 +36,7 @@ export const authApi = createApi({
 				invalidatesTags: ["User"],
 			}),
 
-			login: builder.mutation<AuthPayload, LoginInput>({
+			login: builder.mutation<UserPayload<User>, LoginInput>({
 				query: (args) => ({
 					url: "/auth/login",
 					method: "POST",
@@ -55,12 +54,9 @@ export const authApi = createApi({
 				invalidatesTags: ["User"],
 			}),
 
-			getCurrentUser: builder.query<User, void>({
+			getCurrentUser: builder.query<UserPayload<User>, void>({
 				query: () => "/users/currentuser",
-				transformResponse: (response: ApiResponse<CurrentUserResponse>) => {
-					if (response.status === "success" && response.data) return response.data.user;
-					throw new Error("Unexpected response from server");
-				},
+				transformResponse,
 				providesTags: ["User"],
 			}),
 		};

@@ -1,23 +1,24 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { createContext } from "react";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import {
+	authApi,
 	useGetCurrentUserQuery,
 	useLoginMutation,
 	useLogoutMutation,
 	useRegisterMutation,
-	authApi,
 } from "../api/auth.api";
-import { useDispatch } from "react-redux";
-import type { ApiResponse } from "../types/api-response";
-import type { User } from "../types/user";
-import { useRouter } from "next/navigation";
+import { RTKQueryErrorResponse } from "../types/RTKQueryErrorResponse";
+import type { UserPayload } from "../types/UserPayload";
+import { User } from "../types/User";
 export interface AuthContextType {
 	loginRequest: (email: string, password: string) => Promise<void>;
 	logoutRequest: () => Promise<void>;
 	registerRequest: (name: string, email: string, password: string) => Promise<void>;
-	currentUser: User | null;
+	userPayload: UserPayload<User> | null;
 	loading: boolean;
 	error: string | null;
 	isAuthenticated: boolean;
@@ -31,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 
 	const {
-		data: currentUser,
+		data: userPayload,
 		isLoading,
 		error: currentUserError,
 		refetch: refetchCurrentUser,
@@ -47,8 +48,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			// NOTE: RTK Query will automatically refetch getCurrentUser due to invalidatesTags
 			toast.success("ورود با موفقیت انجام شد");
 			router.push("/");
-		} catch (error: any) {
-			toast.error((error as ApiResponse)?.errors?.[0]?.message || "ورود با خطا مواجه شد");
+		} catch (error) {
+			console.log(error);
+			toast.error(
+				(error as RTKQueryErrorResponse)?.data?.errors?.[0]?.message ||
+					"ورود با خطا مواجه شد",
+			);
 		}
 	};
 
@@ -64,7 +69,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			router.push("/");
 		} catch (error) {
 			toast.error(
-				(error as ApiResponse)?.errors?.[0]?.message || "ثبت نام با خطا مواجه شد",
+				(error as RTKQueryErrorResponse)?.data?.errors?.[0]?.message ||
+					"ثبت نام با خطا مواجه شد",
 			);
 		}
 	};
@@ -77,7 +83,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			toast.success("خروج با موفقیت انجام شد");
 			router.refresh();
 		} catch (error: any) {
-			toast.error((error as ApiResponse)?.errors?.[0]?.message || "خروج با خطا مواجه شد");
+			toast.error(
+				(error as RTKQueryErrorResponse)?.data?.errors?.[0]?.message ||
+					"خروج با خطا مواجه شد",
+			);
 		}
 	};
 
@@ -85,10 +94,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		loginRequest,
 		logoutRequest,
 		registerRequest,
-		currentUser: currentUser || null,
+		userPayload: userPayload || null,
 		loading: isLoading,
-		error: (currentUserError as ApiResponse)?.errors?.[0]?.message || null,
-		isAuthenticated: !!currentUser,
+		error:
+			(currentUserError as RTKQueryErrorResponse)?.data?.errors?.[0]?.message || null,
+		isAuthenticated: !!userPayload,
 		refetchCurrentUser,
 	};
 

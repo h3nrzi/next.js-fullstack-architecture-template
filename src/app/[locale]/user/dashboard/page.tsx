@@ -4,10 +4,10 @@ import { useAuth } from "@/features/auth/hooks/use-auth.hook";
 import { useTranslations } from "next-intl";
 
 const DashboardPage = () => {
-	const { currentUser, loading, error } = useAuth();
+	const { userPayload, loading, error } = useAuth();
 	const t = useTranslations("DashboardPage");
 
-	if (!currentUser) return;
+	if (!userPayload) return;
 
 	if (loading) {
 		return (
@@ -42,7 +42,7 @@ const DashboardPage = () => {
 								{/* *********** FIRST ROW *********** */}
 								<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
 									<h2 className="text-xl font-semibold text-blue-900 mb-2">
-										{t("welcomeBack", { name: currentUser.name })}
+										{t("welcomeBack", { name: userPayload.user.name })}
 									</h2>
 									<p className="text-blue-700">{t("successMessage")}</p>
 								</div>
@@ -58,19 +58,19 @@ const DashboardPage = () => {
 											<span className="text-sm font-medium text-gray-500">
 												{t("name")}
 											</span>
-											<p className="text-sm text-gray-900">{currentUser.name}</p>
+											<p className="text-sm text-gray-900">{userPayload.user.name}</p>
 										</div>
 										<div>
 											<span className="text-sm font-medium text-gray-500">
 												{t("email")}
 											</span>
-											<p className="text-sm text-gray-900">{currentUser.email}</p>
+											<p className="text-sm text-gray-900">{userPayload.user.email}</p>
 										</div>
 										<div>
 											<span className="text-sm font-medium text-gray-500">
 												{t("userId")}
 											</span>
-											<p className="text-sm text-gray-900">{currentUser.id}</p>
+											<p className="text-sm text-gray-900">{userPayload.user.id}</p>
 										</div>
 									</div>
 								</div>

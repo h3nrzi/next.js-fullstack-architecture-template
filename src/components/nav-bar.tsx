@@ -1,12 +1,12 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/features/auth/hooks/use-auth.hook";
-import LanguageSwitcher from "./LanguageSwitcher";
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function NavBar() {
-	const { currentUser, isAuthenticated, loading, logoutRequest } = useAuth();
+	const { userPayload, loading, logoutRequest } = useAuth();
 	const t = useTranslations("NavBar");
 
 	return (
@@ -25,7 +25,7 @@ export default function NavBar() {
 					<div className="flex items-center space-x-4">
 						{loading ? (
 							<div className="text-gray-500">{t("loading")}</div>
-						) : isAuthenticated && currentUser ? (
+						) : userPayload ? (
 							<>
 								<Link
 									href="/user/dashboard"

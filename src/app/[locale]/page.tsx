@@ -6,13 +6,13 @@ import { useTranslations } from "next-intl";
 
 function HomePage() {
 	const t = useTranslations("HomePage");
-	const { currentUser } = useAuth();
+	const { userPayload } = useAuth();
 
 	return (
 		<div className="p-8 flex flex-col gap-2">
 			<h1 className="text-3xl font-bold">{t("welcome")}</h1>
 			<p className="text-lg text-gray-600">{t("description")}</p>
-			{currentUser && (
+			{userPayload && (
 				<div className="flex flex-row gap-2 items-center h-screen justify-start">
 					<p>{t("adminDashboardDescription")}</p>
 					<Link href="/admin/dashboard">
