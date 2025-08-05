@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LoginInput, loginSchema } from "../schema/auth.schema";
 import { useTranslations } from "next-intl";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/use-auth.hook";
 
 export default function LoginForm() {
 	const t = useTranslations("LoginPage");

@@ -1,5 +1,5 @@
-import { useGetCurrentUserQuery } from "../services/auth.api";
-import type { User } from "../types";
+import { useGetCurrentUserQuery } from "../api/auth.api";
+import type { User } from "../types/user";
 
 interface UseCurrentUserReturn {
 	user: User | null;

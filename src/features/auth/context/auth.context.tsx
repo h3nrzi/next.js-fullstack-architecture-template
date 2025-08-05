@@ -8,9 +8,10 @@ import {
 	useLogoutMutation,
 	useRegisterMutation,
 	authApi,
-} from "../services/auth.api";
+} from "../api/auth.api";
 import { useDispatch } from "react-redux";
-import type { ApiResponse, User } from "../types";
+import type { ApiResponse } from "../types/api-response";
+import type { User } from "../types/user";
 import { useRouter } from "next/navigation";
 export interface AuthContextType {
 	loginRequest: (email: string, password: string) => Promise<void>;

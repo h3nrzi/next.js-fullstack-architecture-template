@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { RegisterInput, registerSchema } from "../schema/auth.schema";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/use-auth.hook";
 
 export function RegisterForm() {
 	const { registerRequest } = useAuth();

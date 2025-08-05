@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { AuthPayload, ApiResponse, CurrentUserResponse, User } from "../types";
+import type { CurrentUserResponse } from "../types/current-user-response";
+import type { ApiResponse } from "../types/api-response";
+import type { AuthPayload } from "../types/auth-payload";
+import type { User } from "../types/user";
 import type { RegisterInput, LoginInput } from "../schema/auth.schema";
 
 // Custom base query that includes credentials and handles our API response format

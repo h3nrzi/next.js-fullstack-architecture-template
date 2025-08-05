@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/use-auth.hook";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
