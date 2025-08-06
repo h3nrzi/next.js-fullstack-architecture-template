@@ -10,7 +10,7 @@ export function signAccessToken(userId: string, role: string): string {
 		},
 		process.env.JWT_ACCESS_SECRET!,
 		{
-			expiresIn: parseInt(process.env.JWT_ACCESS_EXPIRES_IN!),
+			expiresIn: "1m",
 		},
 	);
 }
@@ -24,7 +24,7 @@ export function signRefreshToken(userId: string): string {
 		},
 		process.env.JWT_REFRESH_SECRET!,
 		{
-			expiresIn: parseInt(process.env.JWT_REFRESH_EXPIRES_IN!),
+			expiresIn: "7d",
 		},
 	);
 }
@@ -48,7 +48,7 @@ export async function setAuthCookies(
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "strict",
-			path: "/api/auth/refresh", // Restrict to refresh endpoint only
+			path: "/",
 			maxAge: parseInt(process.env.COOKIE_MAX_AGE_REFRESH_TOKEN!),
 		});
 	}

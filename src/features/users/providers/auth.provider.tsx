@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 			toast.success("ورود با موفقیت انجام شد");
 			router.push("/");
 		} catch (error) {
-			console.log(error);
 			toast.error(
 				(error as RTKQueryErrorResponse)?.data?.errors?.[0]?.message ||
 					"ورود با خطا مواجه شد",
