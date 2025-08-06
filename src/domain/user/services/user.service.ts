@@ -1,6 +1,6 @@
+import { NotFoundError } from "@/shared/errors/not-found-error";
 import { IUserDoc } from "../entities/user.interface";
 import { UserRepository } from "../repositories/user.repository";
-import { NotFoundError } from "@/shared/errors/not-found-error";
 
 export class UserService {
 	constructor(private readonly userRepo: UserRepository) {}

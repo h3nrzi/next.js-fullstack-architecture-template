@@ -1,37 +1,29 @@
-import {
-	CustomError,
-	NotAuthorizedError,
-	setAuthCookies,
-	signAccessToken,
-	signRefreshToken,
-	verifyToken,
-} from "@/shared";
-import { cookies } from "next/headers";
+import { container, CustomError, NotAuthorizedError } from "@/shared";
+import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST() {
+	// Rate limiting store (use Redis in production)
+	const refreshAttempts = new Map<string, { count: number; resetTime: number }>();
+	const RATE_LIMIT = 5; // Max 5 refresh attempts per hour
+	const RATE_WINDOW = 60 * 60 * 1000; // 1 hour
+
 	try {
-		const cookieStore = await cookies();
+		// Get client IP
+		const refreshToken = (await cookies()).get("refreshToken")?.value;
+		const clientIP = (await headers()).get("x-forwarded-for") || "unknown";
 
-		const refreshToken = cookieStore.get("refreshToken")?.value;
-		if (!refreshToken) {
-			throw new NotAuthorizedError("رفرش توکن یافت نشد");
+		// Check if user has exceeded the rate limit
+		const now = Date.now();
+		const attempts = refreshAttempts.get(clientIP);
+		if (attempts && attempts.count >= RATE_LIMIT && now < attempts.resetTime) {
+			throw new NotAuthorizedError("تعداد درخواست‌های شما بیش از حد مجاز است");
 		}
 
-		const payload = (await verifyToken(
-			refreshToken,
-			process.env.JWT_REFRESH_SECRET!,
-		)) as {
-			userId: string;
-			role: string;
-		};
-		if (!payload) {
-			throw new NotAuthorizedError("رفرش توکن نامعتبر است");
-		}
+		await container.authService.refreshTokens(clientIP, refreshToken);
 
-		const newAccessToken = signAccessToken(payload.userId, payload.role);
-		const newRefreshToken = signRefreshToken(payload.userId);
-		await setAuthCookies(newAccessToken, newRefreshToken);
+		// Reset rate limit on successful refresh
+		refreshAttempts.delete(clientIP);
 
 		return NextResponse.json(
 			{
@@ -41,6 +33,25 @@ export async function POST() {
 			{ status: 200 },
 		);
 	} catch (err) {
+		// Track failed attempts
+		const clientIP = (await headers()).get("x-forwarded-for") || "unknown";
+		const now = Date.now();
+		const attempts = refreshAttempts.get(clientIP) || {
+			count: 0,
+			resetTime: now + RATE_WINDOW,
+		};
+
+		// If the rate limit has expired, then reset the attempts
+		// If not, increment the attempts
+		if (now >= attempts.resetTime) {
+			attempts.count = 1;
+			attempts.resetTime = now + RATE_WINDOW;
+		} else {
+			attempts.count++;
+		}
+		refreshAttempts.set(clientIP, attempts);
+
+		// If the error is a custom error, return the error
 		if (err instanceof CustomError) {
 			return NextResponse.json(
 				{ status: "fail", errors: err.serializeErrors() },
@@ -48,6 +59,7 @@ export async function POST() {
 			);
 		}
 
+		// If the error is not a custom error, return a generic error
 		return NextResponse.json(
 			{
 				status: "fail",

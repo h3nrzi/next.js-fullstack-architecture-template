@@ -10,7 +10,7 @@ export function signAccessToken(userId: string, role: string): string {
 		},
 		process.env.JWT_ACCESS_SECRET!,
 		{
-			expiresIn: "15m",
+			expiresIn: parseInt(process.env.JWT_ACCESS_EXPIRES_IN!),
 		},
 	);
 }
@@ -19,10 +19,12 @@ export function signRefreshToken(userId: string): string {
 	return jwt.sign(
 		{
 			sub: userId,
+			jti: crypto.randomUUID(), // Unique token ID for tracking
+			iat: Math.floor(Date.now() / 1000),
 		},
 		process.env.JWT_REFRESH_SECRET!,
 		{
-			expiresIn: "7d",
+			expiresIn: parseInt(process.env.JWT_REFRESH_EXPIRES_IN!),
 		},
 	);
 }
@@ -35,19 +37,19 @@ export async function setAuthCookies(
 
 	cookieStore.set("accessToken", accessToken, {
 		httpOnly: true,
-		secure: false,
+		secure: process.env.NODE_ENV === "production",
 		sameSite: "strict",
 		path: "/",
-		maxAge: 60 * 15,
+		maxAge: parseInt(process.env.COOKIE_MAX_AGE_ACCESS_TOKEN!),
 	});
 
 	if (refreshToken) {
 		cookieStore.set("refreshToken", refreshToken, {
 			httpOnly: true,
-			secure: false,
+			secure: process.env.NODE_ENV === "production",
 			sameSite: "strict",
-			path: "/",
-			maxAge: 60 * 60 * 24 * 7,
+			path: "/api/auth/refresh", // Restrict to refresh endpoint only
+			maxAge: parseInt(process.env.COOKIE_MAX_AGE_REFRESH_TOKEN!),
 		});
 	}
 }
@@ -78,10 +80,10 @@ export async function getUserFromRequest(): Promise<{ id: string; role: string }
 	const token = cookieStore.get("accessToken")?.value;
 	if (!token) return null;
 
-	const secret = process.env.JWT_ACCESS_SECRET;
-	if (!secret) throw new Error("JWT_ACCESS_SECRET is not set");
-
-	const payload = (await verifyToken(token, secret)) as { sub: string; role: string };
+	const payload = (await verifyToken(token, process.env.JWT_ACCESS_SECRET!)) as {
+		sub: string;
+		role: string;
+	};
 	if (!payload) return null;
 
 	return {
