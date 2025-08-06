@@ -3,9 +3,15 @@ import { ServerDataResponse } from "@/features/users/types/ServerDataResponse";
 import { UserPayload } from "@/features/users/types/UserPayload";
 import { LoginInput } from "../types/LoginInput";
 import { RegisterInput } from "../types/RegisterInput";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+	createApi,
+	fetchBaseQuery,
+	BaseQueryFn,
+	FetchArgs,
+	FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
 
-const baseQueryWithAuth = fetchBaseQuery({
+const baseQuery = fetchBaseQuery({
 	baseUrl: "/api",
 	credentials: "include",
 	prepareHeaders: (headers) => {
@@ -13,6 +19,34 @@ const baseQueryWithAuth = fetchBaseQuery({
 		return headers;
 	},
 });
+
+const baseQueryWithAuth: BaseQueryFn<
+	string | FetchArgs,
+	unknown,
+	FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+	let result = await baseQuery(args, api, extraOptions);
+
+	// Skip refresh logic for auth endpoints to prevent infinite loops
+	const url = typeof args === "string" ? args : args.url;
+	const isAuthEndpoint = url.includes("/auth/");
+
+	// If request fails with 401 and it's not an auth endpoint, try to refresh token
+	if (result.error && result.error.status === 401 && !isAuthEndpoint) {
+		const refreshResult = await baseQuery(
+			{ url: "/auth/refresh", method: "POST" },
+			api,
+			extraOptions,
+		);
+
+		if (refreshResult.data) {
+			// Retry original request after successful refresh
+			result = await baseQuery(args, api, extraOptions);
+		}
+	}
+
+	return result;
+};
 
 const transformResponse = (response: ServerDataResponse<UserPayload>) => {
 	if (response.status === "success" && response.data) return response.data;
@@ -58,8 +92,21 @@ export const usersApi = createApi({
 				}),
 				invalidatesTags: [TAG_TYPES.USER],
 			}),
+
+			refreshToken: builder.mutation<void, void>({
+				query: () => ({
+					url: "/auth/refresh",
+					method: "POST",
+				}),
+			}),
 		};
 	},
 });
 
-export const { useGetCurrentUserQuery, useRegisterMutation, useLoginMutation, useLogoutMutation } = usersApi;
+export const {
+	useGetCurrentUserQuery,
+	useRegisterMutation,
+	useLoginMutation,
+	useLogoutMutation,
+	useRefreshTokenMutation,
+} = usersApi;
